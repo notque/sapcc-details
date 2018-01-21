@@ -1,4 +1,85 @@
-SAPCC Tracing/Events/Metics - Current State
+SAPCC Tracing/Events/Metrics - Current State
+
+Metrics:
+    Everything should have a prom exporter, and/or does. Prom is the way to collect metrics.
+    Many things have alert functions, but we use Prom Alert Manager, and disable or don't use any other alert systems.
+    Do we use health checks for Kubernetes readiness and liveness probes? How much?
+    
+Events/Logs: Are Events and Logs the same, or Different?... 
+    CADF Format used for Openstack 
+    Other Events, Not sure of any consistency around format.
+    CNCF working on an open event standard, did not choose CADF:
+        https://github.com/cloudevents/spec
+        https://github.com/cloudevents/spec/blob/master/spec.md
+        CNCF Serverless WG owns the Spec, intended for more than just log events.
+    Metadata: 
+        Need to attach project id, and perhaps other metadata to logs. 
+        Google uses a metadata service
+            https://github.com/GoogleCloudPlatform/google-cloud-go/blob/master/compute/metadata/metadata.go
+            Caches look ups.
+        Openstack has a Metadata service in Nova (and a proxy in Neutron)
+            https://docs.openstack.org/dragonflow/latest/specs/metadata_service.html
+            Does not currently have ProjectID
+            The Actual service does have it, and sends the header to nova 
+                X-Instance-ID: The UUID of the virtual instance
+                X-Instance-ID-Signature: A cryptographic signature of the Instance-ID[1]
+                X-Tenant-ID: The UUID of the tenant
+                X-Forwarded-For: The IP of the virtual instance            
+    Scaleability:
+        Log-based message broker
+        Kafka used by AWS, IBM, Most Cloud Providers
+        GKE uses a custom pub/sub that is similar to Nats but more reliable 
+            https://nats.io/
+        SAPCC does not use a message broker at the moment, and instead points directly to Logstash or Elasticsearch
+    Archiving: 
+        Instead of deleting old logs we should use an S3 connector and place them in Swift. 
+        Compress them to save space wherever possible
+    Data Warehouse style Analysis
+        Currently we use Elasticsearch
+        Vora is an option
+
+    StackDriver Google Setup:
+        Uses FluentD for their Agent
+            https://cloudplatform.googleblog.com/2017/10/customizing-stackdriver-logs-fluentd.html
+            Custom FluentD
+                https://github.com/GoogleCloudPlatform/google-fluentd
+                Adds Prom Metrics https://github.com/GoogleCloudPlatform/google-fluentd/commit/7ad8988d5b9db14c2a3105137cb21208cb38c5b7
+                Uses multithreads https://github.com/GoogleCloudPlatform/google-fluentd/commit/283eb7052d3a256078f37d03e8ea3a496794a28f
+                Logging enabled/determined by metadata server on the instances check
+                    https://sourcegraph.com/github.com/GoogleCloudPlatform/google-fluentd@bdb2b56e743e2748315f0e56e416a596149109b1/-/blob/templates/etc/init.d/rpm/td-agent#L193:1
+            Daemonset
+                https://github.com/GoogleCloudPlatform/container-engine-customize-fluentd/blob/master/kubernetes/fluentd-configmap.yaml
+        Google uses a client to send to their PubSub system.
+            https://sourcegraph.com/github.com/GoogleCloudPlatform/google-cloud-go@master/-/blob/logging/logging.go
+            Log Struct
+                https://sourcegraph.com/github.com/GoogleCloudPlatform/google-cloud-go@master/-/blob/logging/logging.go#L518:1
+            Log Full Name - Set by the client when logging entries
+                Format "projects/{ProjectID}/logs/{LogID}" set automatically.
+                https://sourcegraph.com/github.com/GoogleCloudPlatform/google-cloud-go@master/-/blob/logging/logging.go#L518:1
+            Resource Types
+                https://sourcegraph.com/github.com/GoogleCloudPlatform/google-cloud-go@master/-/blob/logging/logging.go#L282:1
+            Severities - 
+                https://sourcegraph.com/github.com/GoogleCloudPlatform/google-cloud-go@master/-/blob/logging/logging.go#L458:16
+        Google uses a client to interact for setting sinks
+            https://sourcegraph.com/github.com/GoogleCloudPlatform/google-cloud-go@master/-/blob/logging/logadmin/logadmin.go
+            Only Sinks Available - Bigquery, and Object Store Bucket
+
+Tracing: 
+    No current tracing models I can see.
+    CNCF OpenTracing 
+        Consistent, expressive, vendor-neutral APIs for distributed tracing and context propagation
+        https://github.com/opentracing/specification/blob/master/specification.md
+        
+    CNCF Jaeger, a Distributed Tracing System 
+        https://github.com/jaegertracing/jaeger
+        Native support for OpenTracing
+        All Jaeger backend components expose Prometheus metrics by default (other metrics backends are also supported). 
+        Logs are written to standard out using the structured logging library zap.
+        Jaeger uses Thrift (https://github.com/jaegertracing/jaeger-idl) not gRPC (and Protocol Buffers) 
+        No Multi Tenant support at the moment, but it's being discussed.
+       
+
+
 
 System (Control Plane) ->
     Kube-State-Metrics 
