@@ -1,0 +1,133 @@
+SAPCC Tracing/Events/Metics - Current State
+
+System (Control Plane) ->
+    Kube-State-Metrics 
+        https://github.com/kubernetes/kube-state-metrics
+        kube-state-metrics is a simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.
+    Prom Node-Exporter
+        https://github.com/prometheus/node_exporter
+        Prometheus exporter for hardware and OS metrics exposed by *NIX kernels
+        Run as a DaemonSet
+    Prom NTP Exporter
+        https://github.com/sapcc/ntp_exporter
+        This is a Prometheus exporter that, when running on a node, checks the drift of that node's clock against a given NTP server.
+        Runs as a DaemonSet
+    Kube node-problem-detector
+        https://github.com/kubernetes/node-problem-detector
+        node-problem-detector aims to make various node problems visible to the upstream layers in cluster management stack.
+        Runs as a DaemonSet
+    SysCtl
+        sap/SysCtl
+        Runs as a DaemonSet
+        Unsure, reseach
+    Kube-Sentry
+        sapcc/kube-sentry
+         https://sentry.$region.cloud.sap/api/0/
+    Prometheus-Collector
+        It collects and aggregates all metrics of the control plane
+    Prometheus-Frontend
+        It federates selected and aggregated data from the collector instance and acts as a persistent frontend. 
+Openstack     
+    Blackbox 
+        # All Statsd Prom Exporter (for it's own metrics)
+        API 
+            performs API checks for Converged Cloud
+        Canaries
+            performs Canary checks for Converged Cloud
+        Certificates
+            checks expiry date of SAP Converged Cloud certificates
+        DataPath
+            performs Datapath checks for Converged Cloud
+        Regression 
+            performs Regression checks for Converged Cloud
+    ELK
+        Fluentd
+            Fluentd is an open source data collector for unified logging layer.
+            https://www.fluentd.org/
+            As a DaemonSet
+            Stores data Directly to an Elasticsearch/Kibana
+            Matches Control Plane containers only (incomplete/wrong list?)
+                etc 
+                systemd-etc 
+                grok
+
+        Logstash Netflow
+            The Logstash Netflow module simplifies the collection, normalization, and visualization of network flow data.
+        Wall-E
+            Create index patterns, remove based on retention 
+        ElasticSearch 
+            Storage for these devices
+            elasticsearch-exporter for Prom Metrics
+            Deletes Indexes over a disk space limit or days retention
+            Read Only access to ES/Kibana from Monsoon user, to create dashboards.
+    FlameGraph
+        #viewing and createing flamegraphs
+        flamegraph-collector
+            DaemonSet
+        flamegraph-viewer
+        Storage: Redis  
+    Grafana
+        Storage: Postgres
+        Main Grafana
+        Grafana Author to get your Dashboards correct
+        Grafana Dev to... Test them before staging?
+    Hermes
+        Openstack Audit Middleware  
+            https://github.com/sapcc/openstack-audit-middleware
+            OpenStack middleware to produce a CADF audit trail from API calls 
+        RabbitMQ
+            Pub/Sub for Events
+        Logstash
+            Pull events, transform, place into Elasticsearch
+            Transformations:
+                Strip Oslo headers
+                Change some CADF Taxonomy issues (Should be in Openstack Audit Middleware)
+                Rename initiator user_id to ID 
+                Additional CADF tomfoolery
+            Output to either Project specific index, or default blob.
+        Elasticsearch
+            Storage for Events
+            Container with Elasticsearch Prom Exporter
+            Data retention on Space or Time, whichever comes first.
+            Rolling time based indexes
+        Hermes-api
+            API connecting Elasticsearch and Elektra
+            Prom Metrics end point
+        Wall-E 
+            Create and remove Indexes in Elasticsearch based on retention
+    Maia
+        #Expose Prometheus as multi-tenant OpenStack service
+
+        SNMP-Exporters
+            ASR 
+            F5
+        VCenter-Datastore-Exporter
+        ESX Node Vcenter Exporter
+
+
+Global
+    Cachet 
+        Cachet is a beautiful and powerful open source status page system.
+        https://github.com/CachetHQ/Cachet
+        Storage: Postgres
+    Prometheus Alert Manager
+        Handles alerts sent by prometheus servers and takes care of deduplicating, grouping, silencing and routing to correct receiver.
+        Connects to Slack
+        Another level of params matching for Alerts, although contains ALERTS 
+        Adds region to source label
+        alertmanager.eu-de-1.cloud.sap
+        Alerts on Collectors, Federations for Prom connections
+        90 Day retention
+
+
+
+
+         
+
+
+
+
+
+
+
+
