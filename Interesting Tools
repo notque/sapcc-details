@@ -4,3 +4,7 @@ Interesting Tool for monitoring
   
   Serverless Event Gateway
     https://github.com/serverless/event-gateway
+
+  Zap
+  https://github.com/uber-go/zap/tree/master
+  Blazing fast, structured, leveled logging in Go.
