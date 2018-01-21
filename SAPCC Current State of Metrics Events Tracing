@@ -5,7 +5,7 @@ Metrics:
     Many things have alert functions, but we use Prom Alert Manager, and disable or don't use any other alert systems.
     Do we use health checks for Kubernetes readiness and liveness probes? How much?
     
-Events/Logs: Are Events and Logs the same, or Different?... 
+Events/Logs:
     CADF Format used for Openstack 
     Other Events, Not sure of any consistency around format.
     CNCF working on an open event standard, did not choose CADF:
