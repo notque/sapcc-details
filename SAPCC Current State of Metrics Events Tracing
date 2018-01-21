@@ -63,6 +63,13 @@ Events/Logs: Are Events and Logs the same, or Different?...
         Google uses a client to interact for setting sinks
             https://sourcegraph.com/github.com/GoogleCloudPlatform/google-cloud-go@master/-/blob/logging/logadmin/logadmin.go
             Only Sinks Available - Bigquery, and Object Store Bucket
+        k8s event exporter using prom
+            https://github.com/GoogleCloudPlatform/k8s-stackdriver
+        Fluentd catchall config
+            https://github.com/GoogleCloudPlatform/fluentd-catch-all-config
+        Exception detector plugin for fluentd
+            https://github.com/GoogleCloudPlatform/fluent-plugin-detect-exceptions
+          
 
 Tracing: 
     No current tracing models I can see.
