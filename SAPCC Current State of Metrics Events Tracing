@@ -69,6 +69,8 @@ Events/Logs: Are Events and Logs the same, or Different?...
             https://github.com/GoogleCloudPlatform/fluentd-catch-all-config
         Exception detector plugin for fluentd
             https://github.com/GoogleCloudPlatform/fluent-plugin-detect-exceptions
+        Managed VMs Docker for Fluentd
+            https://github.com/GoogleCloudPlatform/appengine-sidecars-docker/blob/master/fluentd_logger/Dockerfile
           
 
 Tracing: 
