@@ -30,6 +30,7 @@ Events/Logs:
         Kafka used by AWS, IBM, Most Cloud Providers
         GKE uses a custom pub/sub that is similar to Nats but more reliable 
             https://nats.io/
+            Used by Cloud Foundary 
         SAPCC does not use a message broker at the moment, and instead points directly to Logstash or Elasticsearch
     Archiving: 
         Instead of deleting old logs we should use an S3 connector and place them in Swift. 
