@@ -1,0 +1,33 @@
+StackDriver Google Setup:
+        Uses FluentD for their Agent
+            https://cloudplatform.googleblog.com/2017/10/customizing-stackdriver-logs-fluentd.html
+            Custom FluentD
+                https://github.com/GoogleCloudPlatform/google-fluentd
+                Adds Prom Metrics https://github.com/GoogleCloudPlatform/google-fluentd/commit/7ad8988d5b9db14c2a3105137cb21208cb38c5b7
+                Uses multithreads https://github.com/GoogleCloudPlatform/google-fluentd/commit/283eb7052d3a256078f37d03e8ea3a496794a28f
+                Logging enabled/determined by metadata server on the instances check
+                    https://sourcegraph.com/github.com/GoogleCloudPlatform/google-fluentd@bdb2b56e743e2748315f0e56e416a596149109b1/-/blob/templates/etc/init.d/rpm/td-agent#L193:1
+            Daemonset
+                https://github.com/GoogleCloudPlatform/container-engine-customize-fluentd/blob/master/kubernetes/fluentd-configmap.yaml
+        Google uses a client to send to their PubSub system.
+            https://sourcegraph.com/github.com/GoogleCloudPlatform/google-cloud-go@master/-/blob/logging/logging.go
+            Log Struct
+                https://sourcegraph.com/github.com/GoogleCloudPlatform/google-cloud-go@master/-/blob/logging/logging.go#L518:1
+            Log Full Name - Set by the client when logging entries
+                Format "projects/{ProjectID}/logs/{LogID}" set automatically.
+                https://sourcegraph.com/github.com/GoogleCloudPlatform/google-cloud-go@master/-/blob/logging/logging.go#L518:1
+            Resource Types
+                https://sourcegraph.com/github.com/GoogleCloudPlatform/google-cloud-go@master/-/blob/logging/logging.go#L282:1
+            Severities - 
+                https://sourcegraph.com/github.com/GoogleCloudPlatform/google-cloud-go@master/-/blob/logging/logging.go#L458:16
+        Google uses a client to interact for setting sinks
+            https://sourcegraph.com/github.com/GoogleCloudPlatform/google-cloud-go@master/-/blob/logging/logadmin/logadmin.go
+            Only Sinks Available - Bigquery, and Object Store Bucket
+        k8s event exporter using prom
+            https://github.com/GoogleCloudPlatform/k8s-stackdriver
+        Fluentd catchall config
+            https://github.com/GoogleCloudPlatform/fluentd-catch-all-config
+        Exception detector plugin for fluentd
+            https://github.com/GoogleCloudPlatform/fluent-plugin-detect-exceptions
+        Managed VMs Docker for Fluentd
+https://github.com/GoogleCloudPlatform/appengine-sidecars-docker/blob/master/fluentd_logger/Dockerfile
