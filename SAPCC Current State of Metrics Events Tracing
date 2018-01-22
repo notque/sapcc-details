@@ -53,7 +53,8 @@ Tracing:
         Jaeger uses Thrift (https://github.com/jaegertracing/jaeger-idl) not gRPC (and Protocol Buffers) 
         No Multi Tenant support at the moment, but it's being discussed.
        
-
+    Openstack Tracing - Implemented by Fabian W 
+        https://www.openstack.org/videos/sydney-2017/openstack-osprofiler-ft-cncf-opentracing-distributed-tracing-from-cloud-through-container
 
 
 System (Control Plane) ->
