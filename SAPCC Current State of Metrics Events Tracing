@@ -175,8 +175,13 @@ Openstack
         SNMP-Exporters
             ASR 
             F5
-        VCenter-Datastore-Exporter
-        ESX Node Vcenter Exporter
+    Openstack-helm
+        vCenter-Exporters (WIP)
+            Datacenter-Exporters --> prometheus-collector
+                vCenter and ESXi version infromation per vCenter datacenter
+            Cluster-Exporters --> maia
+                Customer Virtual Machine performance metrics per vCenter cluster
+                Customer Datastore performance metrics per vCenter cluster
 
 
 Global
