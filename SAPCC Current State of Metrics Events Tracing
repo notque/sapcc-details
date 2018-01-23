@@ -1,14 +1,15 @@
 SAPCC Tracing/Events/Metrics - Current State
 
 Metrics:
-    Everything should have a prom exporter, and/or does. Prom is the way to collect metrics.
-    Many things have alert functions, but we use Prom Alert Manager, and disable or don't use any other alert systems.
-    Do we use health checks for Kubernetes readiness and liveness probes? How much?
+    Everything should have a prom exporter, and/or does. Prom is the way to collect metrics. [previously we had Monasca/DataDog agent plugins]
+    Many things have alert functions, but we use Prom Alert Manager, and disable or don't use any other alert systems. [previously we used Monasca/Storm for alarms]
+    Do we use health checks for Kubernetes readiness and liveness probes? How much? [only partially used. Also had quite some issues with readyness/liveness probes destabilizing things]
     
 Events/Logs:
     CADF Format used for Openstack 
-    Other Events, Not sure of any consistency around format.
+    Other Events, Not sure of any consistency around format. [notifications used for technical eventing between few OS components, e.g. Designate and Neutron (or was it Nova?) ]
     CNCF working on an open event standard, did not choose CADF:
+    [ CNCF is about (change) events, CADF is also covering the specific requirements of auditing ]
         https://github.com/cloudevents/spec
         https://github.com/cloudevents/spec/blob/master/spec.md
         CNCF Serverless WG owns the Spec, intended for more than just log events.
@@ -25,6 +26,8 @@ Events/Logs:
                 X-Instance-ID-Signature: A cryptographic signature of the Instance-ID[1]
                 X-Tenant-ID: The UUID of the tenant
                 X-Forwarded-For: The IP of the virtual instance            
+        [ need to understand how the pushing of logs/events is authorized. maybe metadata service can provide credentials
+        for a monitoring user with minimal write-only privileges (like Monasca)]
     Scaleability:
         Log-based message broker
         Kafka used by AWS, IBM, Most Cloud Providers
@@ -32,12 +35,16 @@ Events/Logs:
             https://nats.io/
             Used by Cloud Foundary 
         SAPCC does not use a message broker at the moment, and instead points directly to Logstash or Elasticsearch
-    Archiving: 
-        Instead of deleting old logs we should use an S3 connector and place them in Swift. 
-        Compress them to save space wherever possible
+        [ our previous Monasca logging-as-a-service solution used logstash with a logging API output plugin. Logging
+        API authorized and forwarded to Kafka. Logstash pulled from Kafka and pushed to ES. ]
+Archiving: 
+        Instead of deleting old logs we should use an S3 connector and place them in Swift.
+        [billing the customer for the storage consumption, plus inheriting automatic expiry feature (no Wall-E)]
+        Compress them to save space wherever possible [inherting from Swift]
     Data Warehouse style Analysis
         Currently we use Elasticsearch
-        Vora is an option
+        Vora is an option [ or Presto; key motivation: keep data only in cost-efficient and billable storage (S3) and use
+        distributed SQL capabilities to offer structured access to flat-file data ]
           
 Tracing: 
     No current tracing models I can see.
@@ -50,7 +57,8 @@ Tracing:
         Native support for OpenTracing
         All Jaeger backend components expose Prometheus metrics by default (other metrics backends are also supported). 
         Logs are written to standard out using the structured logging library zap.
-        Jaeger uses Thrift (https://github.com/jaegertracing/jaeger-idl) not gRPC (and Protocol Buffers) 
+        Jaeger uses Thrift (https://github.com/jaegertracing/jaeger-idl) not gRPC (and Protocol Buffers) [ seems like gRPC
+        is not very popular and the future is questionable ]
         No Multi Tenant support at the moment, but it's being discussed.
        
     Openstack Tracing - Implemented by Fabian W 
@@ -82,8 +90,11 @@ System (Control Plane) ->
          https://sentry.$region.cloud.sap/api/0/
     Prometheus-Collector
         It collects and aggregates all metrics of the control plane
+        [ reducing the amount of data so that frontend can handle it. Database is on a memory disk and has only 1h retention.
+        The P8S way of doing sliding-window transformations without pipeline. ]
     Prometheus-Frontend
-        It federates selected and aggregated data from the collector instance and acts as a persistent frontend. 
+        It federates selected and aggregated data from the collector instance and acts as a persistent frontend [ this is 
+        the user-facing Prometheus. The other is just the agent and pre-processor. ] 
 Openstack     
     Blackbox 
         # All Statsd Prom Exporter (for it's own metrics)
@@ -100,7 +111,8 @@ Openstack
     ELK
         Fluentd
             Fluentd is an open source data collector for unified logging layer.
-            https://www.fluentd.org/
+            [ chosen over logstash because its much better Kubernetes integration. Downside: no transformation capabilities ]    
+        https://www.fluentd.org/
             As a DaemonSet
             Stores data Directly to an Elasticsearch/Kibana
             Matches Control Plane containers only (incomplete/wrong list?)
@@ -110,8 +122,10 @@ Openstack
 
         Logstash Netflow
             The Logstash Netflow module simplifies the collection, normalization, and visualization of network flow data.
+            [ where is this? ]
         Wall-E
-            Create index patterns, remove based on retention 
+            [ our workhorse for all kinds of cleanup jobs. Now this is called a nanny ]
+        Create index patterns, remove based on retention 
         ElasticSearch 
             Storage for these devices
             elasticsearch-exporter for Prom Metrics
@@ -127,7 +141,7 @@ Openstack
         Storage: Postgres
         Main Grafana
         Grafana Author to get your Dashboards correct
-        Grafana Dev to... Test them before staging?
+        Grafana Dev to... Test them before staging? [ for testing new Grafana versions ]
     Hermes
         Openstack Audit Middleware  
             https://github.com/sapcc/openstack-audit-middleware
@@ -144,7 +158,7 @@ Openstack
             Output to either Project specific index, or default blob.
         Elasticsearch
             Storage for Events
-            Container with Elasticsearch Prom Exporter
+            Container with Elasticsearch Prom Exporter [ inactive? ]
             Data retention on Space or Time, whichever comes first.
             Rolling time based indexes
         Hermes-api
@@ -154,7 +168,7 @@ Openstack
             Create and remove Indexes in Elasticsearch based on retention
     Maia
         #Expose Prometheus as multi-tenant OpenStack service
-
+        [ exporters to be moved alongside their respective targets ]
         SNMP-Exporters
             ASR 
             F5
