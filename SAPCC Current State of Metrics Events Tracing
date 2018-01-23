@@ -34,6 +34,8 @@ Events/Logs:
         GKE uses a custom pub/sub that is similar to Nats but more reliable 
             https://nats.io/
             Used by Cloud Foundary 
+            Critical Details on Nats from a former Developer
+                https://bravenewgeek.com/building-a-distributed-log-from-scratch-part-5-sketching-a-new-system/
         SAPCC does not use a message broker at the moment, and instead points directly to Logstash or Elasticsearch
         [ our previous Monasca logging-as-a-service solution used logstash with a logging API output plugin. Logging
         API authorized and forwarded to Kafka. Logstash pulled from Kafka and pushed to ES. ]
