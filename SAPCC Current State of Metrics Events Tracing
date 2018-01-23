@@ -122,7 +122,10 @@ Openstack
 
         Logstash Netflow
             The Logstash Netflow module simplifies the collection, normalization, and visualization of network flow data.
-            [ where is this? ]
+            Deployment
+                https://github.com/sapcc/helm-charts/blob/master/openstack/elk/templates/logstash-deployment.yaml
+            Service:
+                https://github.com/sapcc/helm-charts/blob/master/openstack/elk/templates/logstash-service.yaml
         Wall-E
             [ our workhorse for all kinds of cleanup jobs. Now this is called a nanny ]
         Create index patterns, remove based on retention 
