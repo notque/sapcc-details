@@ -1,3 +1,6 @@
+GCP Analytics Ingestion
+        https://cloud.google.com/solutions/architecture/optimized-large-scale-analytics-ingestion?hl=en#top_of_page
+
 StackDriver Google Setup:
         Uses FluentD for their Agent
             https://cloudplatform.googleblog.com/2017/10/customizing-stackdriver-logs-fluentd.html
