@@ -28,6 +28,7 @@ Events/Logs:
                 X-Forwarded-For: The IP of the virtual instance            
         [ need to understand how the pushing of logs/events is authorized. maybe metadata service can provide credentials
         for a monitoring user with minimal write-only privileges (like Monasca)]
+        Neutron injects the metadata service into each neutron network
     Scaleability:
         Log-based message broker
         Kafka used by AWS, IBM, Most Cloud Providers
