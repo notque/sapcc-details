@@ -199,6 +199,7 @@ Global
         alertmanager.eu-de-1.cloud.sap
         Alerts on Collectors, Federations for Prom connections
         90 Day retention
+        Prom alertmanager is stateless and only manages alerts, which are sent by different Promethei.
 
 
 
