@@ -1,0 +1,13 @@
+Helm Diff: 
+  A helm plugin that shows a diff explaining what a helm upgrade would change
+  https://github.com/databus23/helm-diff
+  Syntax:
+    helm diff designate(name of chart) designate(name of helm charts dir) -f staging/values/designate.yaml(location of secrets value file)
+    
+Helm Dependencies:
+  https://github.com/kubernetes/helm/blob/master/docs/helm/helm_dependency.md
+  https://github.com/kubernetes/helm/blob/master/docs/charts.md
+  We use them frequently
+  helm dependency update (helm dep up) in the dir for the charts
+  Dependencies are located in requirements.yaml
+  
