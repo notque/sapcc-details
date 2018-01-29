@@ -11,3 +11,4 @@ Helm Dependencies:
   helm dependency update (helm dep up) in the dir for the charts
   Dependencies are located in requirements.yaml
   
+  These dependencies are other charts that we want. For example, if we wish to include a section from another chart, we have to add it as a dependency
