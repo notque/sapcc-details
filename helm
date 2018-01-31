@@ -12,3 +12,8 @@ Helm Dependencies:
   Dependencies are located in requirements.yaml
   
   These dependencies are other charts that we want. For example, if we wish to include a section from another chart, we have to add it as a dependency
+
+Helm Define ClustterF: 
+  If you are in a large helm system, you may run into people Defining the same keywords in multiple charts.
+  If you use multiple charts as dependencies, you cannot ensure which define you get. It will propegate all calls.
+  Ordering the dependency list does not help.
