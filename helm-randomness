@@ -1,0 +1,4 @@
+Deployment - Image -> Helm Charts -> 
+
+
+Designate pipeline is not taking care of building the image. It is done via kolla build
