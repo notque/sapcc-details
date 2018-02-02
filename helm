@@ -20,3 +20,7 @@ Helm Define ClustterF:
 
 Deployment - Image -> Helm Charts -> 
   Designate pipeline is not taking care of building the image. It is done via kolla build
+
+Diffing Neutron - 
+  Neutron requires multiple values files
+  helm diff neutron neutron --values ~/cc/secrets/$KUBECONTEXT/values/neutron.yaml --values ~/cc/secrets/$KUBECONTEXT/values/neutron-vendor.yaml --values ~/cc/secrets/$KUBECONTEXT/values/neutron-aci.yaml  --values ~/cc/secrets/$KUBECONTEXT/values/globals.yaml
