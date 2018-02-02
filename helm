@@ -17,3 +17,6 @@ Helm Define ClustterF:
   If you are in a large helm system, you may run into people Defining the same keywords in multiple charts.
   If you use multiple charts as dependencies, you cannot ensure which define you get. It will propegate all calls.
   Ordering the dependency list does not help.
+
+Deployment - Image -> Helm Charts -> 
+  Designate pipeline is not taking care of building the image. It is done via kolla build
