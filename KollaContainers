@@ -1,4 +1,5 @@
 We use Kolla Containers to build some pieces of openstack (at least designate).
+https://docs.openstack.org/kolla/latest/admin/image-building.html
 
 In kolla, any python module that needs to be installed comes in via a "plugin": E.g.
 
