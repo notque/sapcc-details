@@ -1,0 +1,53 @@
+We have a promethus collector, and a front end in every region.
+
+Maia is just for customers, we also have a global internal promethus. 
+
+Prometheus is located in 
+helm-charts/system/kube-monitoring/charts
+
+collector, just collects everything from the pods, and everything it finds in kubernetes. 
+
+
+https://prometheus-collector.staging.cloud.sap
+
+status => targets
+
+you see everything it already found. It's autodiscovering everything in the cluster. 
+
+Talks to the kubernetes API, and asks for all the endpoints known in the cluster, and the kubernetes api returns it, and prometheus starts fetching metrics from each of those endpoints.
+
+Not just pods, every object inside kubernetes. 
+
+You give it annotations, and from the list of endpoints, it filters out the relevant ones.
+
+kube-monitoring is deployed via helm, and it's a chart that contains all the prometheus and other exporters that we use to get metrics from the kubernetes itself, or from underlying layers.
+
+
+helm-charts/openstack/limes/templates/api-service.yml
+
+promethus.io/scrape: "true"
+promtheus.io/port: "80"
+
+
+Your pod that exposes metrics in the kubernetes. 
+
+Raw metrics are scraped by the collector, and sometimes we don't want tthe high level detail. You don't want to know every time it scrapes, every 10 seconds or so. So you could forward it to the front end, or aggregate it. 
+
+aggregate it, and it arrives in the prometheus front end.
+
+helm-charts/system/kube-monitoring/charts/prometheus-frontend/templates/config.yaml
+
+the params match[] section is the important one. It matches the __name__ and federates them. 
+
+If you want a metric to go from the collector to the frontend, it has to match one of these rules, or you add them.
+
+
+
+
+Collector regional -> Front end Regional -> Global prometheus living in EU-DE-1
+
+Collector stores data for 1 hour. Front end data lives for 1 week. IN global for 90 days.
+
+The reason for the seperation of prometheus for regions etc, we have a lot of cpus with a lot of metrics. What we do in the collector, we collect them, aggregate them, lose some detail and granularity, and forward them to the front end so the data is manageable.
+
+start all metrics with vcenter_ and metrics will already be pulled into the frontend.
