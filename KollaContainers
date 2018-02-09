@@ -1,0 +1,11 @@
+We use Kolla Containers to build some pieces of openstack (at least designate).
+
+In kolla, any python module that needs to be installed comes in via a "plugin": E.g.
+
+For the Pike build, it was missing several python modules I needed. I had to add them to the build.
+
+https://github.wdf.sap.corp/monsoon/kolla-containers/blob/pike/kolla/etc/kolla-build.conf#L30
+
+You can choose in which layer it should be installed by the convention `[<image-name>-plugin-<plugin-name>]`
+
+Since we want the audit-middleware in all our apps, we add as a openstack-base-plugin, like the "openstack-ops-middleware"
