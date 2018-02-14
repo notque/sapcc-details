@@ -1,0 +1,4 @@
+Installing Openstack client
+sudo -HE pip install --ignore-installed python-openstackclient python-designateclient
+
+Source the rc file for region details. 
