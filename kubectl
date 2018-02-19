@@ -1,0 +1,6 @@
+A cli to simplify working with kubectl for some common workflows
+
+https://github.com/CanopyTax/ckube
+
+brew tap canopytax/ckube
+brew install ckube
