@@ -1,0 +1,2 @@
+Crashlooping rabbitmq due to `Acquiring RabbitMQ lock /var/lib/rabbitmq/rabbitmq-server.lock` ?
+  delete the lock and the usual `sleep 100000`
