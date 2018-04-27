@@ -1,0 +1,87 @@
+Golang Operatior - 
+
+package main
+
+import (
+    "bufio"
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "regexp"
+    "strings"
+)
+
+var Output func(interface{})
+var re = regexp.MustCompile("(.*)\\.(.*)(-.*)?\\.csv")
+
+func main() {
+  // no special setup needed    
+}
+
+func schemaFromCSV(database string, table string, csv []byte) string {
+    r := bufio.NewReaderSize(bytes.NewReader(csv), 255)
+    line, _, _ := r.ReadLine()
+    columns := strings.Split(string(line), ",")
+
+    fields := make([]map[string]interface{}, len(columns))
+    for i := range columns {
+        fields[i] = map[string]interface{}{"name": columns[i], "type": "string"}
+        if columns[i] != "id" {
+            fields[i]["type"] = []string{"null", "string"}
+        }
+    }
+    schema := map[string]interface{}{
+        "namespace": database+".cloud.sap",
+        "type": "record",
+        "name": table,
+        "fields": fields,
+    }
+    
+    b, err := json.Marshal(schema)
+	if err != nil {
+		fmt.Println("error:", err)
+	    return ""
+	}
+	return string(b)
+}
+
+// here implement the function with the input port name, so data coming from this input will call this function
+func Input(val interface{}){
+	message := val.(map[string]interface{})
+	
+	fmt.Println("ccloud input arrived")
+	
+	// read contents
+	body := message["Body"].([]byte)
+	attr := message["Attributes"].(map[string]interface{})
+	newAttr := make(map[string]interface{}, len(attr)+2)
+	for key := range attr {
+		newAttr[key] = attr[key]
+	}
+
+	fmt.Println("ccloud: contents read")
+	
+	// enhance header
+    filename_seg := re.FindStringSubmatch(attr["storage.filename"].(string))
+	if len(filename_seg) < 3 {
+	    fmt.Println("ccloud: ERROR filename cannot be parsed")
+	    return
+	}
+	
+	database := filename_seg[1]
+	table := filename_seg[2]
+    newAttr["vora.record.definition"] = map[string]interface{}{"recName": table}
+    newAttr["avro.schema"] = schemaFromCSV(database, table, body)
+
+    fmt.Println("ccloud: output header ", newAttr)
+
+    // build transformed message
+	newMessage := make(map[string]interface{}, 3)
+	newMessage["Attributes"] = newAttr
+	newMessage["Encoding"] = message["Encoding"]
+	newMessage["Body"] = body
+
+    // output
+    fmt.Println("ccloud output body: ", string(body))
+	Output(newMessage)
+}
