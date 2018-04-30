@@ -5,6 +5,7 @@ makes the most sense.
 
 Example, Vora accepts string values higher than HANA, so the conversion into Vora might lead to incompatability with HANA
 	Fix: 	cast values as a vora view, then move to HANA
+		Or use type fixed in the avro injestor
 		or Precreate the Vora table with limits
 	
 	Pre creating the Vora table allows more options than the Avro operator. 	
