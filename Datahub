@@ -1,7 +1,23 @@
+Architecture:
+
+There are many ways to solve a problem with SAP Datahub, and often that's the biggest challenge is sorting out which way
+makes the most sense. 
+
+Example, Vora accepts string values higher than HANA, so the conversion into Vora might lead to incompatability with HANA
+	Fix: 	cast values as a vora view, then move to HANA
+		or Precreate the Vora table with limits
+	
+	Pre creating the Vora table allows more options than the Avro operator. 	
+		Setting Primary Keys
+		Define Datatypes easily
+
 Ports are Dynamic In SAP DATAHUB 2:
 	kubectl get services should give you an output of what is running where
-Debugging pipelines, use the terminal operator:
-	Just multiplex out to terminal on all pipelines for debugging.
+Debugging pipelines:
+	use the terminal operator:
+		Just multiplex out to terminal on all pipelines for debugging.
+	Turn on tracing for a pipeline
+	
 Injesting data into Vora:
 	Vora Avro Ingestor is useful in most cases, can create tables, etc.
 	Avro Syntax:
