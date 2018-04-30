@@ -6,6 +6,14 @@ makes the most sense.
 In the scoping process, immediately start putting words into pipeline and operators. Don't wait, it will help things make sense and
 allow asking the right questions. 
 
+Installation:
+	Prerequisites for installing SAP Vora: Supported Infrastructure, Container, and Hadoop Platforms
+	https://launchpad.support.sap.com/#/notes/2213226
+	Vora 2.0 Central release note
+	https://launchpad.support.sap.com/#/notes/2523557
+	Documentation
+	https://help.sap.com/viewer/p/SAP_VORA
+
 Example, Vora accepts string values higher than HANA, so the conversion into Vora might lead to incompatability with HANA
 	Fix: 	cast values as a vora view, then move to HANA
 		Or use type fixed in the avro injestor
