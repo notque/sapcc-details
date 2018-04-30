@@ -44,6 +44,7 @@ Injesting data into Vora:
 	Vora Avro Ingestor is useful in most cases, can create tables, etc.
 	Avro Syntax:
 		"{ \"name\": \"[TABLE NAME]\", \"type\": \"record\", \"fields\": [{\"name\": \"[COL1]\", \"type\": \"[DATATYPE]\"}, {\"name\": \"[COL2]\", \"type\": \"[DATATYPE]\"}
+		Avro syntax here is super exact, extra spaces will cause failure
 
 Golang Operatior - 
 
