@@ -3,6 +3,9 @@ Architecture:
 There are many ways to solve a problem with SAP Datahub, and often that's the biggest challenge is sorting out which way
 makes the most sense. 
 
+In the scoping process, immediately start putting words into pipeline and operators. Don't wait, it will help things make sense and
+allow asking the right questions. 
+
 Example, Vora accepts string values higher than HANA, so the conversion into Vora might lead to incompatability with HANA
 	Fix: 	cast values as a vora view, then move to HANA
 		Or use type fixed in the avro injestor
@@ -12,6 +15,23 @@ Example, Vora accepts string values higher than HANA, so the conversion into Vor
 	Pre creating the Vora table allows more options than the Avro operator. 	
 		Setting Primary Keys
 		Define Datatypes easily
+
+Best Practices:
+	Use folders, and hirearchies you define to seperate pipelines.
+	Use labeling on operators inside of pipelines to explain their usage.
+	Precreate tables in Vora
+		Currently allows you to set primary key or not null constraint where Avro cannot
+		
+Reusabilty: 
+	All pipelines are held in JSON with all operators and config. Get used to exporting these, and reusing configurations.
+	Change from graph view to JSON view
+	
+
+
+How to stop a running pipeline via Signal? 
+	Create an attribute that switches on end of file from the load, that attribute is pushed through the pipeline and can 
+	be acted on by the graph terminator. 
+
 
 Ports are Dynamic In SAP DATAHUB 2:
 	kubectl get services should give you an output of what is running where
