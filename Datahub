@@ -7,6 +7,7 @@ Example, Vora accepts string values higher than HANA, so the conversion into Vor
 	Fix: 	cast values as a vora view, then move to HANA
 		Or use type fixed in the avro injestor
 		or Precreate the Vora table with limits
+			Type must be a streaming table on create.
 	
 	Pre creating the Vora table allows more options than the Avro operator. 	
 		Setting Primary Keys
