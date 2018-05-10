@@ -1,0 +1,39 @@
+When you try to drain a Kubernetes node but it blocks ?
+
+This is not a story. Is more a reminder to myself, to remember what to do when I try to drain a Kubernetes node, but it blocks.
+
+So I start by trying to drain the node :
+
+> kubectl drain <node_name> [--ignore-daemonsets --force --delete-local-data]
+
+node "<node_name>" cordoned
+pod "pod-xxx" evicted
+pod "pod-yyy" evicted
+pod "pod-zzz" evicted
+
+then it blocks after have evicted the pod-zzz,
+
+if you try to find the pod-zzz you ‘ll see that the pod does not exist anymore , that’s normal it was evicted, so it was not the blocking pod. So we need to find the blocking pod.
+
+For that I will search all the pods of the node (on a new console)
+
+> kubectl get pods -o wide --all-namespaces | grep <node_name>
+
+namespace  my-blocking-pod  0/1  Terminating n xh <none> <node_name>
+
+Once I have the name of the guilty one :
+
+> kubectl delete pod <pod_name> -n=<namespace> --grace-period=0 --force
+
+Once it’s done you are going to see that the console with the drain running will continue.
+
+You can after restart your node (if you are connected to the node):
+
+> systemctl restart kubelet
+> systemctl status kubelet 
+
+Active: active (running) since .....
+
+and uncordon your node, if you don’t have other maintenance to do :
+
+> kubectl uncordon <node_name 
