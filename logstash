@@ -1,0 +1,4 @@
+env variable LS_JAVA_OPTS for adding jvm options
+
+jps -lvm
+to display running java options
