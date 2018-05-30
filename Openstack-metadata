@@ -1,2 +1,26 @@
 #testing
 curl http://169.254.169.254/latest/meta-data
+
+#ulimits
+ulimit -n 1048576
+ulimit -u 1048576
+
+https://bugs.launchpad.net/oslo.rootwrap/+bug/1760471
+
+ulimit -Hn
+ulimit -Sn
+
+
+root@neutron-server-3513652278-lhmm4:/# time python -c "import subprocess;subprocess.Popen(['ls'], close_fds=True)"
+bin  boot  container.init  dev  development  etc  home  lib  lib64  media  mnt  neutron-etc  neutron-etc-region  neutron-etc-vendor  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+
+real    0m0.534s
+user    0m0.201s
+sys     0m0.309s
+root@neutron-server-3513652278-lhmm4:/# time python -c "import subprocess;subprocess.Popen(['ls'], close_fds=False)"
+bin  boot  container.init  dev  development  etc  home  lib  lib64  media  mnt  neutron-etc  neutron-etc-region  neutron-etc-vendor  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+
+real    0m0.086s
+user    0m0.070s
+sys     0m0.016s
+root@neutron-server-3513652278-lhmm4:/# 
