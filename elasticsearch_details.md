@@ -1,3 +1,5 @@
+http://elasticsearch-cheatsheet.jolicode.com/
+
 We use rolling indexes with a date time, that are created.
 
 index.max_result_window defaults to 10k, but won't allow pagination past 10k. Have to increase size, but also eats more heap memory.
