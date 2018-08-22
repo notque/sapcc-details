@@ -2,3 +2,5 @@ Installing Openstack client
 pip install --user --ignore-installed python-openstackclient python-designateclient
 
 Source the rc file for region details. 
+
+Openstack client doesn't handle special characters for env variables well. Specify on the command line
