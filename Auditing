@@ -1,0 +1,22 @@
+Openstack Audit Middleware
+https://github.com/sapcc/openstack-audit-middleware/blob/master/auditmiddleware/_api.py
+
+# default mappings from HTTP methods to CADF actions
+_method_action_map = {'GET': taxonomy.ACTION_READ,
+                      'HEAD': taxonomy.ACTION_READ,
+                      'PUT': taxonomy.ACTION_UPDATE,
+                      'PATCH': taxonomy.ACTION_UPDATE, 'POST':
+                          taxonomy.ACTION_CREATE,
+                      'DELETE': taxonomy.ACTION_DELETE}
+                
+ # matcher for UUIDs
+_UUID_RE = re.compile("[0-9a-f\-]+$")
+
+
+# For golang, satori uuidis deprocated, use https://github.com/gofrs/uuid instead
+def _make_uuid(s):
+    if s.isdigit():
+        return str(uuid.UUID(int=int(s)))
+    else:
+        return s
+        
